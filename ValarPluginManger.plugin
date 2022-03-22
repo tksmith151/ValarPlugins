@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<Plugin>
+	<Information>
+		<Name>ValarPluginManager</Name>
+		<Author>Valheru</Author>
+		<Version>0.1</Version>
+		<Description>Plugin to manage loading and unloading valar plugin.</Description>
+	</Information>
+	<Package>ValarPlugins.Manager.Main</Package>
+	<Configuration Apartment="ValarPluginManagerApartment" />
+</Plugin>

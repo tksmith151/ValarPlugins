@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<Plugin>
+	<Information>
+		<Name>ValarPlugin</Name>
+		<Author>Valheru</Author>
+		<Version>0.1</Version>
+		<Description>Plugin to make your character play like a Valar.</Description>
+	</Information>
+	<Package>ValarPlugins.ValarPlugin.Main</Package>
+	<Configuration Apartment="ValarPluginApartment" />
+</Plugin>
