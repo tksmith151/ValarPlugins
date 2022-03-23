@@ -107,7 +107,7 @@ Load = function ()
     TimedUpdate();
 
     -- Setup Timed Loop
-    MainTimedLoopInterval = 5; -- number of seconds
+    MainTimedLoopInterval = 5; -- number of seconds per loop
     MainTimedLoop = TimedLoop(TimedUpdate, MainTimedLoopInterval);
     MainTimedLoop.Start();
 
@@ -117,9 +117,8 @@ Load = function ()
 end
 
 Unload = function ()
-    -- Stop Timed Loop
-    MainTimedLoop.Stop();
-    MainFastLoop.Stop();
+    MainTimedLoop.Stop(); -- Stop Timed Loop
+    MainFastLoop.Stop();  -- Stop Fast Loop
 end
 
 
@@ -127,14 +126,14 @@ end
 -- Plugin Loading and Unloading Listeners --
 --------------------------------------------
 Turbine.Plugin.Load = function(self, sender, args)
-    Turbine.Shell.WriteLine("-- ValarPlugin: Loading --");
+    Turbine.Shell.WriteLine("ValarPlugin: Loading");
     Load()
-    Turbine.Shell.WriteLine("-- ValarPlugin: Loaded! --");
+    Turbine.Shell.WriteLine("ValarPlugin: Loaded");
 end
 
 Turbine.Plugin.Unload = function(self, sender, args)
-    Turbine.Shell.WriteLine("-- ValarPlugin: Unloading --");
+    Turbine.Shell.WriteLine("ValarPlugin: Unloading");
     Unload()
-    Turbine.Shell.WriteLine("-- ValarPlugin: Unloaded! --");
+    Turbine.Shell.WriteLine("ValarPlugin: Unloaded");
 end
 

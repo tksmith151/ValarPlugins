@@ -3,8 +3,6 @@ PlayerClass = {}
 -----------------------
 -- Primary Functions --
 -----------------------
-PlayerClass.FastUpdate = function () end -- This function is overwritten by each class Load() function
-
 PlayerClass.Load = function ()
     if  LocalPlayer.Class == Turbine.Gameplay.Class.Beorning    then  PlayerClasses.Beorning.Load()    end
     if  LocalPlayer.Class == Turbine.Gameplay.Class.Burglar     then  PlayerClasses.Burglar.Load()     end
@@ -18,5 +16,6 @@ PlayerClass.Load = function ()
     if  LocalPlayer.Class == Turbine.Gameplay.Class.Warden      then  PlayerClasses.Warden.Load()      end
 end
 
+PlayerClass.FastUpdate = function () end -- This function is overwritten by each class Load() function
 PlayerClass.TimedUpdate = function () end -- This function is overwritten by each class Load() function
 
