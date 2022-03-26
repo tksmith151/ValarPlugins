@@ -95,17 +95,25 @@ end
 
 Common.UpdateTrainedSkills = function ()
     local TrainedSkillsCount = LocalPlayer.TrainedSkillsInstance:GetCount();
-    -- TODO: Need to deactivate untrained skills
+    SkillNames = {}
+    -- Populate New Skills
     for Index = 1, TrainedSkillsCount, 1 do
         local SkillInstance = LocalPlayer.TrainedSkillsInstance:GetItem(Index);
         local SkillInfoInstance = SkillInstance:GetSkillInfo();
         local SkillName = SkillInfoInstance:GetName();
+        SkillNames[SkillName] = true
         if LocalPlayer.Skills[SkillName]==nil then
             LocalPlayer.Skills[SkillName] = {}
             LocalPlayer.Skills[SkillName].Instance = SkillInstance
             LocalPlayer.Skills[SkillName].LastUsed = 0;
             LocalPlayer.Skills[SkillName].InUse = false;
             LocalPlayer.Skills[SkillName].OnCooldown = false;
+        end
+    end
+    -- Remove Unusable Skills
+    for SkillName, Skill in pairs(LocalPlayer.Skills) do
+        if SkillNames[SkillName] == nil then
+            LocalPlayer.Skills[SkillName] = nil
         end
     end
 end
@@ -142,7 +150,8 @@ Common.WatchChat = function (sender, args)
 	local ChatInfo = Utilities.Parse(string.gsub(string.gsub(args.Message,"<rgb=#......>(.*)</rgb>","%1"),"^%s*(.-)%s*$", "%1"));
     -- Burglar Fix
     if ChatInfo.SkillName then
-        ChatInfo.SkillName = string.gsub(ChatInfo.SkillName,"^Stealthed ","");
+        ChatInfo.SkillName = string.gsub(ChatInfo.SkillName,"^Stealthed ",""); -- Burglar Fix
+        ChatInfo.SkillName = string.gsub(ChatInfo.SkillName,"Expose %(Bear%)","Expose %(Man%)"); -- Beorning FIx
         if LocalPlayer.Name == ChatInfo.InitiatorName then
             if LocalPlayer.Skills[ChatInfo.SkillName] then
                 if not LocalPlayer.Skills[ChatInfo.SkillName].InUse then

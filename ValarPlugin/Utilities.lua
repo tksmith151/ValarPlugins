@@ -115,6 +115,10 @@ Utilities.ToString = function ( tbl )
     end
 end
 
+Utilities.Log = function ( tbl )
+	Turbine.Shell.WriteLine(Utilities.ToString(tbl))
+end
+
 -- Code based on Combat Analysis Plugin, Thanks Gerard Cerchio, argonui, hdflux, Ravdor, Dromo and James Bebbington
 Utilities.Parse = function(line)
     local Output = {}
