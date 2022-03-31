@@ -38,6 +38,14 @@ Utilities.GetLeastRecentlyUsedSkill = function(SkillNames)
     return EarliestSkillName
 end
 
+Utilities.SelectPrioritySkill = function(SkillFunctions)
+	for Index, SkillFunction in pairs(SkillFunctions) do
+		local SkillName = SkillFunction()
+		if SkillName then return SkillName end
+	end
+	return nil;
+end
+
 Utilities.GetPrioritySkill = function(SkillNames)
     for Index, SkillName in pairs(SkillNames) do
         if Utilities.CanUseSkill(SkillName) then
@@ -48,10 +56,7 @@ Utilities.GetPrioritySkill = function(SkillNames)
 end
 
 Utilities.PlayerHasEffect = function (EffectName)
-    if LocalPlayer.Effects[EffectName] then
-        return true
-    end
-    return false
+    if LocalPlayer.Effects[EffectName] then return true else return false end
 end
 
 Utilities.PlayerMissingEffect = function (EffectName)

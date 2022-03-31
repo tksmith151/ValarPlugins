@@ -5,6 +5,7 @@ Beorning = {}
 -----------------------
 Beorning.FastUpdate = function ()
     -- Update Data
+    Beorning.UpdateWrath();
     -- Update UI
     Beorning.UpdateQuickslots();
 end
@@ -13,6 +14,7 @@ Beorning.Load = function ()
     PlayerClass.FastUpdate = Beorning.FastUpdate;
     PlayerClass.TimedUpdate = Beorning.TimedUpdate;
     SessionUI.CombatQuickslotWindow = UI.QuickslotWindow(1290,816,6);
+    Beorning.Wrath = 0
 end
 
 Beorning.TimedUpdate = function ()
@@ -151,72 +153,125 @@ end
 
 Beorning.GetDamageQuickslot = function ()
     if LocalPlayer.TraitLine == "Red" then
-        NextSkillName = Beorning.GetExpose()
-        if NextSkillName then return Beorning.Shortcuts[NextSkillName] end
-
-        NextSkillName = Beorning.GetBearBeeSwarm()
-        if NextSkillName then return Beorning.Shortcuts[NextSkillName] end
-
-        local PrioritySkills = {
-            "Bash",
-            "Slash",
-            "Slam",
-            "Biting Edge",
+        local PrioritySkillSelectors ={
+            Beorning.Cleanse,
+            Beorning.Hearten,
+            Beorning.InitialFerociousRoar,
+            Beorning.BearBeeSwarm,
+            Beorning.Expose,
+            Beorning.DefaultRedDPS,
         }
-        NextSkill = Utilities.GetPrioritySkill(PrioritySkills);
-        if NextSkill then return Beorning.Shortcuts[NextSkill] end
+        SkillName = Utilities.SelectPrioritySkill(PrioritySkillSelectors)
+        return Beorning.Shortcuts[SkillName]
     end
 
 
     if LocalPlayer.TraitLine == "Yellow" then
-        NextSkillName = Beorning.GetGribeornMark()
-        if NextSkillName then return Beorning.Shortcuts[NextSkillName] end
-
-        local PrioritySkills = {
-            "Vicious Claws",
-            "Bee Swarm",
-            "Biting Edge",
-            "Slam",
-            "Thrash - Tier 1",
-            "Slash",
-        }
-        NextSkill = Utilities.GetPrioritySkill(PrioritySkills);
         if NextSkill then return Beorning.Shortcuts[NextSkill] end
+        local PrioritySkillSelectors = {
+            Beorning.Cleanse,
+            Beorning.EncouragingRoar,
+            Beorning.Hearten,
+            Beorning.InitialFerociousRoar,
+            Beorning.GribeornMark,
+            Beorning.DefaultYellowDPS,
+        }
+        SkillName = Utilities.SelectPrioritySkill(PrioritySkillSelectors)
+        return Beorning.Shortcuts[SkillName]
     end
-
-    NextSkillName = Beorning.GetBearForm()
-    if NextSkillName then return Beorning.Shortcuts[NextSkillName] end
-
-    NextSkillName = Beorning.GetManForm()
-    if NextSkillName then return Beorning.Shortcuts[NextSkillName] end
 end
 
-Beorning.GetBearForm = function ()
+Beorning.BearForm = function ()
     if not LocalPlayer.Effects["Bear-form"] and Utilities.CanUseSkill("Bear-form") then return "Bear-form" end
 end
 
-Beorning.GetManForm = function ()
+Beorning.ManForm = function ()
     if not LocalPlayer.Effects["Man-form"] and Utilities.CanUseSkill("Man-form") then return "Man-form" end
 end
 
-Beorning.GetGribeornMark = function ()
+Beorning.GribeornMark = function ()
     if not LocalPlayer.Effects["Mark of Grimbeorn"] and Utilities.CanUseSkill("Mark of Grimbeorn") then return "Mark of Grimbeorn" end
 end
 
-Beorning.GetBearBeeSwarm = function ()
+Beorning.BearBeeSwarm = function ()
     if Utilities.CanUseSkill("Bee Swarm") then
-        NextSkillName = Beorning.GetBearForm();
+        NextSkillName = Beorning.BearForm();
         if NextSkillName then return NextSkillName end
         return "Bee Swarm";
     end
 end
 
-Beorning.GetExpose = function()
+Beorning.InitialFerociousRoar = function ()
+    if Beorning.Wrath == 0 and Utilities.CanUseSkill("Ferocious Roar") then return "Ferocious Roar" end
+end
+
+Beorning.Cleanse = function ()
+    if LocalPlayer.CanCure and Utilities.CanUseSkill("Cleanse") then return "Cleanse" end
+end
+
+Beorning.Expose = function ()
     if (LocalPlayer.Skills["Expose (Man)"].LastUsed + 13 < Turbine.Engine.GetGameTime()) and Utilities.CanUseSkill("Expose (Man)") then
-        NextSkillName = Beorning.GetBearForm()
+        NextSkillName = Beorning.BearForm()
         if NextSkillName then return NextSkillName end
         return "Expose"
     end
+end
+
+Beorning.DefaultRedDPS = function()
+    local PrioritySkills = {
+        "Bash",
+        "Slash",
+        "Slam",
+        "Biting Edge",
+    }
+    return Utilities.GetPrioritySkill(PrioritySkills);
+end
+
+Beorning.BitingEdge = function ()
+    if Utilities.CanUseSkill("Biting Edge") then
+        NextSkillName = Beorning.ManForm()
+        if NextSkillName then return NextSkillName end
+        return "Biting Edge"
+    end 
+end
+
+Beorning.Slam = function ()
+    if Utilities.CanUseSkill("Slam") then
+        NextSkillName = Beorning.ManForm()
+        if NextSkillName then return NextSkillName end
+        return "Slam"
+    end 
+end
+
+Beorning.Hearten = function ()
+    if LocalPlayer.MoralePercentage < 0.6 and Utilities.CanUseSkill("Hearten") then
+        NextSkillName = Beorning.ManForm()
+        if NextSkillName then return NextSkillName end
+        return "Hearten"
+    end
+end
+
+Beorning.EncouragingRoar = function ()
+    if LocalPlayer.MoralePercentage < 0.4 and Utilities.CanUseSkill("Encouraging Roar") then
+        NextSkillName = Beorning.BearForm()
+        if NextSkillName then return NextSkillName end
+        return "Encouraging Roar"
+    end
+end
+
+Beorning.DefaultYellowDPS = function()
+    local PrioritySkills = {
+        "Bee Swarm",
+        "Vicious Claws",
+        "Biting Edge",
+        "Slam",
+        "Slash",
+    }
+    return Utilities.GetPrioritySkill(PrioritySkills);
+end
+
+Beorning.UpdateWrath = function()
+    Beorning.Wrath = LocalPlayer.ClassAttributesInstance:GetWrath()
 end
 
 Beorning.UpdateTraitLine = function ()
