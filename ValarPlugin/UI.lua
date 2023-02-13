@@ -73,7 +73,7 @@ function UI.QuickslotWindow:SetQuickslot(Index, ShortcutData)
     if ShortcutData~=nil then
         self.Quickslots[Index]:SetShortcut(Turbine.UI.Lotro.Shortcut(Turbine.UI.Lotro.ShortcutType.Skill, ShortcutData));
     else
-        self.Quickslots[Index]:SetShortcut(Turbine.UI.Lotro.Shortcut( Turbine.UI.Lotro.ShortcutType.Undefined, "" ));
+        self.Quickslots[Index]:SetShortcut(Turbine.UI.Lotro.Shortcut(Turbine.UI.Lotro.ShortcutType.Undefined, "" ));
     end
 end
 

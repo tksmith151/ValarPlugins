@@ -66,6 +66,10 @@ Utilities.PlayerMissingEffect = function (EffectName)
     return true
 end
 
+Utilities.Print = function (InputObject)
+	Turbine.Shell.WriteLine(Utilities.ToString(InputObject))
+end
+
 Utilities.RemoveCallback = function (object, event, callback)
     if (object[event] == callback) then
         object[event] = nil;

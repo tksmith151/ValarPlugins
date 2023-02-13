@@ -133,9 +133,13 @@ Common.UpdateUsedSkills = function ()
 end
 
 Common.AddSkillLog = function(SkillName)
+    local LogLength = 10
+    -- Add skill to log
     LocalPlayer.SkillLog.Next = LocalPlayer.SkillLog.Next + 1
     LocalPlayer.SkillLog[LocalPlayer.SkillLog.Next] = SkillName
-    if ((LocalPlayer.SkillLog.Next - LocalPlayer.SkillLog.Last) >= 10) then
+
+    -- Clean up old log entries
+    if ((LocalPlayer.SkillLog.Next - LocalPlayer.SkillLog.Last) >= LogLength) then
         LocalPlayer.SkillLog[LocalPlayer.SkillLog.Last] = nil 
         LocalPlayer.SkillLog.Last = LocalPlayer.SkillLog.Last + 1
     end
@@ -143,13 +147,16 @@ Common.AddSkillLog = function(SkillName)
 end
 
 Common.WatchChat = function (sender, args)
+    -- filter for only combat logs
 	if (args.ChatType ~= Turbine.ChatType.PlayerCombat) then
 		return;
 	end
+
 	-- grab line from combat log, strip it of color, trim it, and parse it according to the localized parsing function
 	local ChatInfo = Utilities.Parse(string.gsub(string.gsub(args.Message,"<rgb=#......>(.*)</rgb>","%1"),"^%s*(.-)%s*$", "%1"));
-    -- Burglar Fix
-    if ChatInfo.SkillName then
+
+    -- update skill information based on logs
+    if ChatInfo ~= nil and ChatInfo.SkillName then
         ChatInfo.SkillName = string.gsub(ChatInfo.SkillName,"^Stealthed ",""); -- Burglar Fix
         ChatInfo.SkillName = string.gsub(ChatInfo.SkillName,"Expose %(Bear%)","Expose %(Man%)"); -- Beorning FIx
         if LocalPlayer.Name == ChatInfo.InitiatorName then
@@ -159,7 +166,7 @@ Common.WatchChat = function (sender, args)
                     LocalPlayer.Skills[ChatInfo.SkillName].LastUsed = Turbine.Engine.GetGameTime();
                     LocalPlayer.Skills[ChatInfo.SkillName].InUse = true
                     Common.AddSkillLog(ChatInfo.SkillName)
-                end 
+                end
             end
         end
     end

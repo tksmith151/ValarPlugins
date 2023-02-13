@@ -164,7 +164,7 @@ Warden.UpdateLastGambit = function ()
 end
 
 Warden.UpdateMarching = function ()
-    if LocalPlayer.Skills["Forced March"].InUse then
+    if LocalPlayer.Skills["Forced March"] and LocalPlayer.Skills["Forced March"].InUse then
         LocalPlayer.Marching = true;
         return
     end
@@ -199,7 +199,14 @@ Warden.UpdateTrainedGambits = function ()
 end
 
 Warden.UpdateTraitLine = function ()
-    LocalPlayer.TraitLine = "Red"
+    TraitLine = "Yellow"
+    if LocalPlayer.Skills["Warning Shot"] ~= nil then
+        TraitLine = "Blue"
+    elseif LocalPlayer.Skills["Shield Piercer"] ~= nil then
+        TraitLine = "Red"
+    end
+    LocalPlayer.TraitLine = TraitLine
+    Turbine.Shell.WriteLine(Utilities.ToString(LocalPlayer.TraitLine));
 end
 
 Warden.UpdateQuickslots = function ()
@@ -241,6 +248,8 @@ Warden.GambitToSequence = function (Gambit)
 end
 
 Warden.GetNextSkill = function (DesiredGambit)
+    -- Determines the next gambit builder
+    -- based on the current gambit, the desired gambit, and cooldowns
     local CurrentGambit = LocalPlayer.CurrentGambit
     local NextSkillNumber = 0
     if #CurrentGambit == 0 then

@@ -70,7 +70,7 @@ function TimedLoop:Constructor(UpdateFunction, Interval)
         self.CurrentTime = Turbine.Engine.GetGameTime();
         if self.CurrentTime > self.NextTime then
             self.NextTime = Turbine.Engine.GetGameTime() + Interval;
-            TimedUpdate();
+            UpdateFunction();
         end
     end
 end
