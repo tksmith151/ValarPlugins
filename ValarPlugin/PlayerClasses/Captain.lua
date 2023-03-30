@@ -10,7 +10,7 @@ Captain.FastUpdate = function ()
 end
 
 Captain.Load = function ()
-    PlayerClass.FastUpdate = Captain.FastUpdate;
+    Model.Update.PlayerClass.Fast = Captain.FastUpdate;
     SessionUI.CombatQuickslotWindow = UI.QuickslotWindow(1290,816,6);
 end
 

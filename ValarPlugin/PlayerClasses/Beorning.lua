@@ -12,8 +12,8 @@ Beorning.FastUpdate = function ()
 end
 
 Beorning.Load = function ()
-    PlayerClass.FastUpdate = Beorning.FastUpdate;
-    PlayerClass.TimedUpdate = Beorning.TimedUpdate;
+    Model.Update.PlayerClass.Fast = Beorning.FastUpdate;
+    Model.Update.PlayerClass.Timed = Beorning.TimedUpdate;
     SessionUI.CombatQuickslotWindow = UI.QuickslotWindow(1290,816,6);
     Beorning.Wrath = 0
     Beorning.MarkOfBeornApplied = false
@@ -265,11 +265,11 @@ Beorning.GetMainQuickslot = function ()
 
     if LocalPlayer.TraitLine == "Yellow" then
         PrioritySkillSelectors = {
+            Beorning.GribeornMark,
+            Beorning.YellowSelfHeal,
             Beorning.Cleanse,
-            Beorning.Hearten,
-            Beorning.EncouragingRoar,
-            Beorning.RejuvenatingBellow,
             Beorning.YellowMark,
+            Beorning.YellowBearDPS,
             Beorning.YellowManDPS,
         }
         SkillName = Utilities.SelectPrioritySkill(PrioritySkillSelectors)
@@ -307,7 +307,7 @@ Beorning.Cleanse = function ()
 end
 
 Beorning.Hearten = function ()
-    if not (LocalPlayer.MoralePercentage < 0.7 or Beorning.Wrath < 50) then return end
+    if not (LocalPlayer.MoralePercentage < 0.6 or Beorning.Wrath < 50) then return end
     local FormSkill = Beorning.ManForm()
     if FormSkill then return FormSkill end
     if Utilities.CanUseSkill("Hearten") then
@@ -316,7 +316,7 @@ Beorning.Hearten = function ()
 end
 
 Beorning.EncouragingRoar = function ()
-    if LocalPlayer.MoralePercentage < 0.6 then
+    if LocalPlayer.MoralePercentage < 0.7 then
         local FormSkill = Beorning.BearForm()
         if FormSkill then return FormSkill end
         if Utilities.CanUseSkill("Encouraging Roar") then
@@ -462,13 +462,43 @@ Beorning.YellowMark = function ()
     end
 end
 
+Beorning.YellowSelfHeal = function ()
+    local SkillName = nil
+    if LocalPlayer.MoralePercentage < 0.7 then
+        if LocalPlayer.Effects["Bear-form"] then
+            if Utilities.CanUseSkill("Encouraging Roar") then return "Encouraging Roar" end
+        elseif LocalPlayer.Effects["Man-form"] then
+            if Utilities.CanUseSkill("Hearten") then return "Hearten" end
+        end
+        PrioritySkillSelectors = {
+            Beorning.EncouragingRoar,
+            Beorning.Hearten,
+            Beorning.RejuvenatingBellow,
+        }
+        SkillName = Utilities.SelectPrioritySkill(PrioritySkillSelectors)
+        if SkillName then return Beorning.Shortcuts[SkillName] end
+    end
+end
+
+Beorning.YellowBearDPS = function ()
+    if LocalPlayer.Effects["Bear-form"] then
+        local PrioritySkills = {
+            "Bee Swarm",
+            "Vigilant Roar",
+            "Slash",
+        }
+        local SkillName = Utilities.GetPrioritySkill(PrioritySkills)
+        return SkillName
+    end
+end
+
 Beorning.YellowManDPS = function ()
     local PrioritySkills = {
-        "Slash",
         "Vicious Claws",
         "Slam",
         "Serrated Edge",
         "Biting Edge",
+        "Slash",
         "Nature's Vengeance",
     }
     local SkillName = Utilities.GetPrioritySkill(PrioritySkills)

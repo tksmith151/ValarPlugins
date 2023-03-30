@@ -10,7 +10,7 @@ LoreMaster.FastUpdate = function ()
 end
 
 LoreMaster.Load = function ()
-    PlayerClass.FastUpdate = LoreMaster.FastUpdate;
+    Model.Update.PlayerClass.Fast = LoreMaster.FastUpdate;
     SessionUI.CombatQuickslotWindow = UI.QuickslotWindow(1290,816,6);
 end
 

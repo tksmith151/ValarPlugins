@@ -14,8 +14,8 @@ end
 Warden.Load = function ()
     LocalPlayer.TrainedGamibtsInstance = LocalPlayer.ClassAttributesInstance:GetTrainedGambits();
     LocalPlayer.Gambits = {}
-    PlayerClass.FastUpdate = Warden.FastUpdate;
-    PlayerClass.TimedUpdate = Warden.TimedUpdate;
+    Model.Update.PlayerClass.Fast = Warden.FastUpdate;
+    Model.Update.PlayerClass.Timed = Warden.TimedUpdate;
     SessionUI.CombatQuickslotWindow = UI.QuickslotWindow(909,794,6);
 end
 

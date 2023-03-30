@@ -26,6 +26,7 @@ Common.Load = function ()
     LocalPlayer.SkillLog = {Next = 0, Last = 1};
 
     SessionUI.DebugWindow = UI.DebugWindow();
+    -- SessionUI.DumpWindow = UI.DumpWindow();
 
     Utilities.AddCallback(Turbine.Chat, "Received", Common.WatchChat);
 end

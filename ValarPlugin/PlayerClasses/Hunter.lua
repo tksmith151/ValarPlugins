@@ -10,7 +10,7 @@ Hunter.FastUpdate = function ()
 end
 
 Hunter.Load = function ()
-    PlayerClass.FastUpdate = Hunter.FastUpdate;
+    Model.Update.PlayerClass.Fast = Hunter.FastUpdate;
     SessionUI.CombatQuickslotWindow = UI.QuickslotWindow(1290,816,6);
 end
 

@@ -11,7 +11,7 @@ Champion.FastUpdate = function ()
 end
 
 Champion.Load = function ()
-    PlayerClass.FastUpdate = Champion.FastUpdate;
+    Model.Update.PlayerClass.Fast = Champion.FastUpdate;
     SessionUI.CombatQuickslotWindow = UI.QuickslotWindow(1290,816,6);
 end
 

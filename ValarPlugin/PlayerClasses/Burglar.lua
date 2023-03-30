@@ -9,7 +9,7 @@ Burglar.FastUpdate = function ()
 end
 
 Burglar.Load = function ()
-    PlayerClass.FastUpdate = Burglar.FastUpdate;
+    Model.Update.PlayerClass.Fast = Burglar.FastUpdate;
     PlayerClass.Shortcuts = Burglar.Shortcuts;
     SessionUI.CombatQuickslotWindow = UI.QuickslotWindow(945,829,4);
 
@@ -106,7 +106,7 @@ Burglar.GetAntidote = function ()
 end
 
 Burglar.GetHeal = function ()
-    if LocalPlayer.MoralePercentage < 0.3 and Utilities.CanUseSkill("Touch and Go") then
+    if State.Player.Morale.Percentage < 0.3 and Utilities.CanUseSkill("Touch and Go") then
         return "Touch and Go"
     end
 end

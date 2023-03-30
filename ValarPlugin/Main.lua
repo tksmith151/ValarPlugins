@@ -17,6 +17,9 @@ import "ValarPlugins.ValarPlugin";
 LocalPlayer = {};
 SessionUI = {};
 
+-- new
+State = {};
+
 -----------
 -- Debug --
 -----------
@@ -40,21 +43,21 @@ end
 ----------------------
 TimedUpdate = function ()
     Common.TimedUpdate();
-    PlayerClass.TimedUpdate();
+    Model.Update.Timed();
 end
 
 FastUpdate = function ()
     Common.FastUpdate();
-    PlayerClass.FastUpdate();
+    Model.Update.Fast();
 end
 
 
 ------------------------
 -- Timed Updated Loop --
 ------------------------
-TimedLoop = class( Turbine.UI.Control );
+TimedLoop = class(Turbine.UI.Control);
 function TimedLoop:Constructor(UpdateFunction, Interval)
-    Turbine.UI.Control.Constructor( self );
+    Turbine.UI.Control.Constructor(self);
     self.Interval = Interval;
 
     self.Start = function ()
@@ -104,11 +107,11 @@ Load = function ()
     -- Load Session Data and Functions
     Common.Load();
     PlayerClass.Load();
+    Model.Load.State();
     TimedUpdate();
 
     -- Setup Timed Loop
-    MainTimedLoopInterval = 5; -- number of seconds per loop
-    MainTimedLoop = TimedLoop(TimedUpdate, MainTimedLoopInterval);
+    MainTimedLoop = TimedLoop(TimedUpdate, Setting.TimedLoopInterval);
     MainTimedLoop.Start();
 
     -- Setup Fast Loop
