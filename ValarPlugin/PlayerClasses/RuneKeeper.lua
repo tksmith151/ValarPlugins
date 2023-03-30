@@ -11,7 +11,7 @@ RuneKeeper.FastUpdate = function ()
 end
 
 RuneKeeper.Load = function ()
-    Model.Update.PlayerClass.Fast = RuneKeeper.FastUpdate;
+    Model.Player.Class.Update.Fast = RuneKeeper.FastUpdate;
     SessionUI.CombatQuickslotWindow = UI.QuickslotWindow(945,829,4);
 end
 

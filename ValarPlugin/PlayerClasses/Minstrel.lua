@@ -10,7 +10,7 @@ Minstrel.FastUpdate = function ()
 end
 
 Minstrel.Load = function ()
-    Model.Update.PlayerClass.Fast = Minstrel.FastUpdate;
+    Model.Player.Class.Update.Fast = Minstrel.FastUpdate;
     SessionUI.CombatQuickslotWindow = UI.QuickslotWindow(1290,816,6);
 end
 

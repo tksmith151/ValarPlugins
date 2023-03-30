@@ -107,7 +107,7 @@ Load = function ()
     -- Load Session Data and Functions
     Common.Load();
     PlayerClass.Load();
-    Model.Load.State();
+    Model.Load();
     TimedUpdate();
 
     -- Setup Timed Loop

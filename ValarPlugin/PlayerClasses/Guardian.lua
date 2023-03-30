@@ -10,7 +10,7 @@ Guardian.FastUpdate = function ()
 end
 
 Guardian.Load = function ()
-    Model.Update.PlayerClass.Fast = Guardian.FastUpdate;
+    Model.Player.Class.Update.Fast = Guardian.FastUpdate;
     SessionUI.CombatQuickslotWindow = UI.QuickslotWindow(1290,816,6);
 end
 

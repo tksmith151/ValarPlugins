@@ -9,7 +9,7 @@ Burglar.FastUpdate = function ()
 end
 
 Burglar.Load = function ()
-    Model.Update.PlayerClass.Fast = Burglar.FastUpdate;
+    Model.Player.Class.Update.Fast = Burglar.FastUpdate;
     PlayerClass.Shortcuts = Burglar.Shortcuts;
     SessionUI.CombatQuickslotWindow = UI.QuickslotWindow(945,829,4);
 

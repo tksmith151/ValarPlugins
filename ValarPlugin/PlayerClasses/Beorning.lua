@@ -12,8 +12,8 @@ Beorning.FastUpdate = function ()
 end
 
 Beorning.Load = function ()
-    Model.Update.PlayerClass.Fast = Beorning.FastUpdate;
-    Model.Update.PlayerClass.Timed = Beorning.TimedUpdate;
+    Model.Player.Class.Update.Fast = Beorning.FastUpdate;
+    Model.Player.Class.Update.Timed = Beorning.TimedUpdate;
     SessionUI.CombatQuickslotWindow = UI.QuickslotWindow(1290,816,6);
     Beorning.Wrath = 0
     Beorning.MarkOfBeornApplied = false
