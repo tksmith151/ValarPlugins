@@ -41,11 +41,12 @@ Model.Load.Player = function ()
     State.Player.Effects.Instance = State.Player.Instance:GetEffects();
     State.Player.Effects.Count = State.Player.Effects.Instance:GetCount();
     State.Player.Effects.Curable = 0
-    State.Player.Effects.Table = {}
+    State.Player.Effects.HasCurable = false
+    State.Player.Effects.Table = {} -- Populated by Model.Update.Player.Effects
     -- Skills --
     State.Player.Skills = {};
     State.Player.Skills.Instance = State.Player.Instance:GetTrainedSkills();
-    State.Player.Skills.Table = {};
+    State.Player.Skills.Table = {}; -- Populated by Model.Update.Player.TrainedSkills
     State.Player.Skills.Log = {Next = 0, Last = 1};
     -- Target --
     State.Player.Target = {};
@@ -109,12 +110,18 @@ Model.Update.Player.Effects = function ()
     for Index = 1, State.Player.Effects.Count, 1 do
         local EffectInstance = State.Player.Effects.Instance:Get(Index);
         local EffectName = EffectInstance:GetName();
-        State.Player.Effects.Table[EffectName] = EffectInstance;
+        State.Player.Effects.Table[EffectName] = {}
+        State.Player.Effects.Table[EffectName].Instance = EffectInstance;
         if EffectInstance:IsCurable() and EffectInstance:IsDebuff() then
             curable_effects = curable_effects + 1
         end
     end
     State.Player.Effects.Curable = curable_effects
+    if State.Player.Effects.Curable > 0 then
+        State.Player.Effects.HasCurable = true
+    else
+        State.Player.Effects.HasCurable = false
+    end
 end
 
 Model.Update.Player.IsInCombat = function ()
@@ -169,8 +176,8 @@ end
 -- PlayerClass --
 
 Model.Update.PlayerClass = {}
-Model.Update.PlayerClass.Fast = function () end -- This function is overwritten by each class Load() function
-Model.Update.PlayerClass.Timed = function () end -- This function is overwritten by each class Load() function
+Model.Update.PlayerClass.Fast = function () end -- This function is set by each PlayerClass Load() function
+Model.Update.PlayerClass.Timed = function () end -- This function is set by each PlayerClass Load() function
 
 ----------------
 -- End Update --

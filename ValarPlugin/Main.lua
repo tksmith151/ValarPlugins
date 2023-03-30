@@ -111,7 +111,7 @@ Load = function ()
     TimedUpdate();
 
     -- Setup Timed Loop
-    MainTimedLoop = TimedLoop(TimedUpdate, Setting.TimedLoopInterval);
+    MainTimedLoop = TimedLoop(TimedUpdate, Setting.Main.TimedLoopInterval);
     MainTimedLoop.Start();
 
     -- Setup Fast Loop
