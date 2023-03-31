@@ -25,14 +25,6 @@ State = {};
 -----------
 debug = function ()
     Turbine.Shell.WriteLine("Valar Plugin Debug");
-    --local key_list = {}
-    --for k,v in pairs(LocalPlayer.Skills) do
-    --    table.insert(key_list, k)
-    --end
-    --table.sort(key_list)
-    --Turbine.Shell.WriteLine(Utilities.ToString(key_list));
-    --Turbine.Shell.WriteLine(Utilities.ToString(LocalPlayer.Skills[1]:GetName()))
-    --Turbine.Shell.WriteLine(Utilities.ToString(LocalPlayer.Stance));
     Turbine.Shell.WriteLine(Utilities.ToString(SessionUI.DebugWindow.DebugQuickslot:GetShortcut():GetData()));
     Turbine.Shell.WriteLine(Utilities.ToString(LocalPlayer.TargetEffects));
 end

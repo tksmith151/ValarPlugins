@@ -46,23 +46,7 @@ function UI.QuickslotWindow:Constructor(PositionX, PositionY, QuickslotsSize)
             self.Quickslots[Index]:SetZOrder(2);
         end
     end
-    --[[ Debug
-    self.DebugQuickslot = Turbine.UI.Lotro.Quickslot();
-    self.DebugQuickslot:SetParent(self);
-    self.DebugQuickslot:SetSize(36,36);
-    self.DebugQuickslot:SetPosition(18,144);
-    self.DebugQuickslot:SetVisible(true);
-    self.DebugQuickslot:SetShortcut(Turbine.UI.Lotro.Shortcut( Turbine.UI.Lotro.ShortcutType.Undefined, "" ));
-    self.DebugButton = Turbine.UI.Lotro.Button();
-    self.DebugButton:SetParent(self);
-    self.DebugButton:SetText("Debug");
-    self.DebugButton:SetPosition( 0, 184 );
-    self.DebugButton:SetSize( 72, 20 );
-    self.DebugButton:SetEnabled(true);
-    self.DebugButton.Click = function(sender, args)
-        debug();
-    end]]
-    self:SetHeight((#self.QuickslotInfo / 2) * 36)
+    self:SetHeight((#self.QuickslotInfo / 2) * 36 + 36)
     self:SetWidth(78)
     self:SetPosition(PositionX,PositionY);
     self:SetVisible(true);
