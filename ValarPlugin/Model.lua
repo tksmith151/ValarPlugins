@@ -27,15 +27,12 @@ Model.Player = {}
 
 Model.Player.Load = function ()
     State.Player = {}
-    -- Instance --
     State.Player.Instance = Turbine.Gameplay.LocalPlayer:GetInstance();
-    -- Name --
     State.Player.Name = State.Player.Instance:GetName();
-    -- Combat --
     State.Player.IsInCombat = State.Player.Instance:IsInCombat();
     -- Target --
-    State.Player.Target = {};
-    State.Player.TargetEffects = {};
+    -- State.Player.Target = {};
+    -- State.Player.TargetEffects = {};
     -- Sub Tables --
     Model.Player.Class.Load()
     Model.Player.Effects.Load()
@@ -46,7 +43,6 @@ end
 Model.Player.Update = {}
 
 Model.Player.Update.Fast = function ()
-    -- Combat --
     State.Player.IsInCombat = State.Player.Instance:IsInCombat();
     -- Sub Tables --
     Model.Player.Class.Update.Fast()
