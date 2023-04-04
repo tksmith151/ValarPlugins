@@ -19,6 +19,16 @@ Model.Update.Timed = function ()
     Model.Player.Update.Timed();
 end
 
+----------
+-- Chat --
+----------
+
+Model.Chat = {}
+
+Model.Chat.Load = function ()
+    Utilities.AddCallback(Turbine.Chat, "Received", Utilities.WatchChat);
+end
+
 ------------
 -- Player --
 ------------

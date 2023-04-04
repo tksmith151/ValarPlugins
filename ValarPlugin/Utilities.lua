@@ -14,8 +14,8 @@ Utilities.AddCallback = function (object, event, callback)
 end
 
 Utilities.CanUseSkill = function (SkillName)
-    if LocalPlayer.Skills[SkillName] then
-        local SkillInstance = LocalPlayer.Skills[SkillName].Instance
+    if State.Player.Skills.Table[SkillName] then
+        local SkillInstance = State.Player.Skills.Table[SkillName].Instance
         if SkillInstance:IsUsable() == true and SkillInstance:GetResetTime() <= -1 then
             return true
         end
@@ -27,8 +27,8 @@ Utilities.GetLeastRecentlyUsedSkill = function(SkillNames)
     local EarliestSkillName = nil
     local EarliestTime = Turbine.Engine.GetGameTime();
     for Index, SkillName in pairs(SkillNames) do
-        if LocalPlayer.Skills[SkillName] then
-            local LastTime = LocalPlayer.Skills[SkillName].LastUsed
+        if State.Player.Skills.Table[SkillName] then
+            local LastTime = State.Player.Skills.Table[SkillName].LastUsed
             if LastTime < EarliestTime and Utilities.CanUseSkill(SkillName) then
                 EarliestSkillName = SkillName
                 EarliestTime = LastTime
@@ -56,11 +56,11 @@ Utilities.GetPrioritySkill = function(SkillNames)
 end
 
 Utilities.PlayerHasEffect = function (EffectName)
-    if LocalPlayer.Effects[EffectName] then return true else return false end
+    if State.Player.Effects.Table[EffectName] then return true else return false end
 end
 
 Utilities.PlayerMissingEffect = function (EffectName)
-    if LocalPlayer.Effects[EffectName] then
+    if State.Player.Effects.Table[EffectName] then
         return false
     end
     return true
@@ -126,6 +126,45 @@ end
 
 Utilities.Log = function ( tbl )
 	Turbine.Shell.WriteLine(Utilities.ToString(tbl))
+end
+
+Utilities.AddSkillLog = function(SkillName)
+    local LogLength = 10
+    -- Add skill to log
+    State.Player.Skills.Log.Next = State.Player.Skills.Log.Next + 1
+    State.Player.Skills.Log[State.Player.Skills.Log.Next] = SkillName
+
+    -- Clean up old log entries
+    if ((State.Player.Skills.Log.Next - State.Player.Skills.Log.Last) >= LogLength) then
+        State.Player.Skills.Log[State.Player.Skills.Log.Last] = nil 
+        State.Player.Skills.Log.Last = State.Player.Skills.Log.Last + 1
+    end
+    --Turbine.Shell.WriteLine(Utilities.ToString(State.Player.Skills.Log));
+end
+
+Utilities.WatchChat = function (sender, args)
+    -- filter for only combat logs
+	if (args.ChatType ~= Turbine.ChatType.PlayerCombat) then
+		return;
+	end
+
+	-- grab line from combat log, strip it of color, trim it, and parse it according to the localized parsing function
+	local ChatInfo = Utilities.Parse(string.gsub(string.gsub(args.Message,"<rgb=#......>(.*)</rgb>","%1"),"^%s*(.-)%s*$", "%1"));
+
+    -- update skill information based on logs
+    if ChatInfo ~= nil and ChatInfo.SkillName then
+        ChatInfo.SkillName = string.gsub(ChatInfo.SkillName,"^Stealthed ",""); -- Burglar Fix
+        ChatInfo.SkillName = string.gsub(ChatInfo.SkillName,"Expose %(Bear%)","Expose %(Man%)"); -- Beorning FIx
+        if State.Player.Name == ChatInfo.InitiatorName then
+            if State.Player.Skills.Table[ChatInfo.SkillName] then
+                if not State.Player.Skills.Table[ChatInfo.SkillName].InUse then
+                    State.Player.Skills.Table[ChatInfo.SkillName].LastUsed = Turbine.Engine.GetGameTime();
+                    State.Player.Skills.Table[ChatInfo.SkillName].InUse = true
+                    Utilities.AddSkillLog(ChatInfo.SkillName)
+                end
+            end
+        end
+    end
 end
 
 -- Code based on Combat Analysis Plugin, Thanks Gerard Cerchio, argonui, hdflux, Ravdor, Dromo and James Bebbington
