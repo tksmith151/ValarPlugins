@@ -19,7 +19,7 @@ Beorning.Load = function ()
     Beorning.MarkOfBeornApplied = false
     Beorning.TargetAquired = 0
 
-    Utilities.AddCallback(LocalPlayer.Instance, "TargetChanged", Beorning.OnTargetChange)
+    Utilities.AddCallback(State.Player.Instance, "TargetChanged", Beorning.OnTargetChange)
 end
 
 Beorning.TimedUpdate = function ()
@@ -176,7 +176,7 @@ end
 Beorning.GetBearQuickslot = function ()
     local SkillName = nil
     local PrioritySkillSelectors = {}
-    if LocalPlayer.TraitLine == "Blue" then
+    if State.Player.TraitLine == "Blue" then
         PrioritySkillSelectors = {
             Beorning.Cleanse,
             Beorning.BearForm,
@@ -186,7 +186,7 @@ Beorning.GetBearQuickslot = function ()
         if SkillName then return Beorning.Shortcuts[SkillName] end
     end
 
-    if LocalPlayer.TraitLine == "Red" then
+    if State.Player.TraitLine == "Red" then
         PrioritySkillSelectors = {
             Beorning.Cleanse,
             Beorning.BearForm,
@@ -200,7 +200,7 @@ end
 Beorning.GetManQuickslot = function ()
     local SkillName = nil
     local PrioritySkillSelectors = {}
-    if LocalPlayer.TraitLine == "Blue" then
+    if State.Player.TraitLine == "Blue" then
         PrioritySkillSelectors = {
             Beorning.Cleanse,
             Beorning.ManForm,
@@ -213,7 +213,7 @@ Beorning.GetManQuickslot = function ()
         if SkillName then return Beorning.Shortcuts[SkillName] end
     end
 
-    if LocalPlayer.TraitLine == "Red" then
+    if State.Player.TraitLine == "Red" then
         PrioritySkillSelectors = {
             Beorning.Cleanse,
             Beorning.ManForm,
@@ -224,7 +224,7 @@ Beorning.GetManQuickslot = function ()
         if SkillName then return Beorning.Shortcuts[SkillName] end
     end
 
-    if LocalPlayer.TraitLine == "Yellow" then
+    if State.Player.TraitLine == "Yellow" then
         PrioritySkillSelectors = {
             Beorning.Cleanse,
             Beorning.ManForm,
@@ -239,7 +239,7 @@ end
 Beorning.GetMainQuickslot = function ()
     local SkillName = nil
     local PrioritySkillSelectors = {}
-    if LocalPlayer.TraitLine == "Blue" then
+    if State.Player.TraitLine == "Blue" then
         PrioritySkillSelectors = {
             Beorning.Cleanse,
             Beorning.Hearten,
@@ -252,7 +252,7 @@ Beorning.GetMainQuickslot = function ()
         if SkillName then return Beorning.Shortcuts[SkillName] end
     end
 
-    if LocalPlayer.TraitLine == "Red" then
+    if State.Player.TraitLine == "Red" then
         PrioritySkillSelectors = {
             Beorning.Cleanse,
             Beorning.Hearten,
@@ -263,7 +263,7 @@ Beorning.GetMainQuickslot = function ()
         if SkillName then return Beorning.Shortcuts[SkillName] end
     end
 
-    if LocalPlayer.TraitLine == "Yellow" then
+    if State.Player.TraitLine == "Yellow" then
         PrioritySkillSelectors = {
             Beorning.GribeornMark,
             Beorning.YellowSelfHeal,
@@ -285,10 +285,10 @@ Beorning.OnTargetChange = function (sender, args)
 end
 
 Beorning.UpdateMarkOfBeornApplied = function ()
-    if LocalPlayer.TraitLine == "Yellow" then
-        if LocalPlayer.Skills["Mark of Beorn"] ~= nil then
-            if LocalPlayer.Skills["Mark of Beorn"].InUse then
-                if Beorning.TargetAquired < LocalPlayer.Skills["Mark of Beorn"].LastUsed then
+    if State.Player.TraitLine == "Yellow" then
+        if State.Player.Skills.Table["Mark of Beorn"] ~= nil then
+            if State.Player.Skills.Table["Mark of Beorn"].InUse then
+                if Beorning.TargetAquired < State.Player.Skills.Table["Mark of Beorn"].LastUsed then
                     Beorning.MarkOfBeornApplied = true;
                     return
                 end
@@ -303,11 +303,11 @@ end
 -----------------------------
 
 Beorning.Cleanse = function ()
-    if LocalPlayer.CanCure and Utilities.CanUseSkill("Cleanse") then return "Cleanse" end
+    if State.Player.Effects.HasCurable and Utilities.CanUseSkill("Cleanse") then return "Cleanse" end
 end
 
 Beorning.Hearten = function ()
-    if not (LocalPlayer.MoralePercentage < 0.6 or Beorning.Wrath < 50) then return end
+    if not (State.Player.Morale.Percentage < 0.6 or Beorning.Wrath < 50) then return end
     local FormSkill = Beorning.ManForm()
     if FormSkill then return FormSkill end
     if Utilities.CanUseSkill("Hearten") then
@@ -316,7 +316,7 @@ Beorning.Hearten = function ()
 end
 
 Beorning.EncouragingRoar = function ()
-    if LocalPlayer.MoralePercentage < 0.7 then
+    if State.Player.Morale.Percentage < 0.7 then
         local FormSkill = Beorning.BearForm()
         if FormSkill then return FormSkill end
         if Utilities.CanUseSkill("Encouraging Roar") then
@@ -326,7 +326,7 @@ Beorning.EncouragingRoar = function ()
 end
 
 Beorning.RejuvenatingBellow = function ()
-    if LocalPlayer.MoralePercentage < 0.5 then
+    if State.Player.Morale.Percentage < 0.5 then
         local FormSkill = Beorning.BearForm()
         if FormSkill then return FormSkill end
         if Utilities.CanUseSkill("Rejuvenating Bellow") then
@@ -337,7 +337,7 @@ end
 
 
 Beorning.PreBuildWrath = function ()
-    if LocalPlayer.IsInCombat == false then
+    if State.Player.IsInCombat == false then
         if Beorning.Wrath < 70 then
             local SkillName = nil
             SkillName = Beorning.ManForm()
@@ -356,7 +356,7 @@ end
 -- Form Skill Utilities --
 --------------------------
 Beorning.BearForm = function ()
-    if not LocalPlayer.Effects["Bear-form"] and Utilities.CanUseSkill("Bear-form") then return "Bear-form" end
+    if not State.Player.Effects.Table["Bear-form"] and Utilities.CanUseSkill("Bear-form") then return "Bear-form" end
 end
 
 Beorning.BearFormSkill = function (SkillName)
@@ -368,7 +368,7 @@ Beorning.BearFormSkill = function (SkillName)
 end
 
 Beorning.ManForm = function ()
-    if not LocalPlayer.Effects["Man-form"] and Utilities.CanUseSkill("Man-form") then return "Man-form" end
+    if not State.Player.Effects.Table["Man-form"] and Utilities.CanUseSkill("Man-form") then return "Man-form" end
 end
 
 Beorning.ManFormSkill = function (SkillName)
@@ -388,7 +388,7 @@ Beorning.GuardedAttack = function ()
 end
 
 Beorning.BlueBearDPS = function ()
-    if LocalPlayer.Effects["Bear-form"] then
+    if State.Player.Effects.Table["Bear-form"] then
         local PrioritySkills = {
             "Bee Swarm",
             "Vigilant Roar",
@@ -417,7 +417,7 @@ end
 --------------------------
 
 Beorning.RedBearDPS = function ()
-    if LocalPlayer.Effects["Bear-form"] then
+    if State.Player.Effects.Table["Bear-form"] then
         local PrioritySkills = {
             "Expose",
             "Bash",
@@ -464,10 +464,10 @@ end
 
 Beorning.YellowSelfHeal = function ()
     local SkillName = nil
-    if LocalPlayer.MoralePercentage < 0.7 then
-        if LocalPlayer.Effects["Bear-form"] then
+    if State.Player.Morale.Percentage < 0.7 then
+        if State.Player.Effects.Table["Bear-form"] then
             if Utilities.CanUseSkill("Encouraging Roar") then return "Encouraging Roar" end
-        elseif LocalPlayer.Effects["Man-form"] then
+        elseif State.Player.Effects.Table["Man-form"] then
             if Utilities.CanUseSkill("Hearten") then return "Hearten" end
         end
         PrioritySkillSelectors = {
@@ -481,7 +481,7 @@ Beorning.YellowSelfHeal = function ()
 end
 
 Beorning.YellowBearDPS = function ()
-    if LocalPlayer.Effects["Bear-form"] then
+    if State.Player.Effects.Table["Bear-form"] then
         local PrioritySkills = {
             "Bee Swarm",
             "Vigilant Roar",
@@ -506,7 +506,7 @@ Beorning.YellowManDPS = function ()
 end
 
 Beorning.GetDamageQuickslot = function ()
-    if LocalPlayer.TraitLine == "Blue" then
+    if State.Player.TraitLine == "Blue" then
         local PrioritySkillSelectors = {
             Beorning.Cleanse,
             Beorning.Hearten,
@@ -518,7 +518,7 @@ Beorning.GetDamageQuickslot = function ()
         return Beorning.Shortcuts[SkillName]
     end
 
-    if LocalPlayer.TraitLine == "Red" then
+    if State.Player.TraitLine == "Red" then
         local PrioritySkillSelectors = {
             Beorning.Cleanse,
             Beorning.Hearten,
@@ -532,7 +532,7 @@ Beorning.GetDamageQuickslot = function ()
     end
 
 
-    if LocalPlayer.TraitLine == "Yellow" then
+    if State.Player.TraitLine == "Yellow" then
         local PrioritySkillSelectors = {
             Beorning.Cleanse,
             Beorning.EncouragingRoar,
@@ -547,7 +547,7 @@ Beorning.GetDamageQuickslot = function ()
 end
 
 Beorning.GribeornMark = function ()
-    if not LocalPlayer.Effects["Mark of Grimbeorn"] and Utilities.CanUseSkill("Mark of Grimbeorn") then return "Mark of Grimbeorn" end
+    if not State.Player.Effects.Table["Mark of Grimbeorn"] and Utilities.CanUseSkill("Mark of Grimbeorn") then return "Mark of Grimbeorn" end
 end
 
 Beorning.BearBeeSwarm = function ()
@@ -563,11 +563,11 @@ Beorning.InitialFerociousRoar = function ()
 end
 
 Beorning.Cleanse = function ()
-    if LocalPlayer.CanCure and Utilities.CanUseSkill("Cleanse") then return "Cleanse" end
+    if State.Player.Effects.HasCurable and Utilities.CanUseSkill("Cleanse") then return "Cleanse" end
 end
 
 Beorning.Expose = function ()
-    if (LocalPlayer.Skills["Expose (Man)"].LastUsed + 13 < Turbine.Engine.GetGameTime()) and Utilities.CanUseSkill("Expose (Man)") then
+    if (State.Player.Skills.Table["Expose (Man)"].LastUsed + 13 < Turbine.Engine.GetGameTime()) and Utilities.CanUseSkill("Expose (Man)") then
         NextSkillName = Beorning.BearForm()
         if NextSkillName then return NextSkillName end
         return "Expose"
@@ -610,7 +610,7 @@ Beorning.Thrash = function()
 end
 
 Beorning.Hearten = function ()
-    if not (LocalPlayer.MoralePercentage < 0.7 or Beorning.Wrath < 50) then return end
+    if not (State.Player.Morale.Percentage < 0.7 or Beorning.Wrath < 50) then return end
     local FormSkill = Beorning.ManForm()
     if FormSkill then return FormSkill end
     if Utilities.CanUseSkill("Hearten") then
@@ -630,17 +630,17 @@ Beorning.DefaultYellowDPS = function()
 end
 
 Beorning.UpdateWrath = function()
-    Beorning.Wrath = LocalPlayer.ClassAttributesInstance:GetWrath()
+    Beorning.Wrath = State.Player.Class.Attributes.Instance:GetWrath()
 end
 
 Beorning.UpdateTraitLine = function ()
     TraitLine = "Blue"
-    if LocalPlayer.Skills["Bash"] ~= nil then
+    if State.Player.Skills.Table["Bash"] ~= nil then
         TraitLine = "Red"
-    elseif LocalPlayer.Skills["Mark of Grimbeorn"] ~= nil then
+    elseif State.Player.Skills.Table["Mark of Grimbeorn"] ~= nil then
         TraitLine = "Yellow"
     end
-    LocalPlayer.TraitLine = TraitLine
+    State.Player.TraitLine = TraitLine
 end
 
 ----------------------------------
