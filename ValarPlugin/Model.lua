@@ -7,6 +7,7 @@ Model = {}
 Model.Load =  function ()
     State = {}
     Model.Player.Load()
+    Model.Chat.Load()
 end
 
 Model.Update = {}

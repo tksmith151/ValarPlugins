@@ -562,10 +562,6 @@ Beorning.InitialFerociousRoar = function ()
     if Beorning.Wrath == 0 and Utilities.CanUseSkill("Ferocious Roar") then return "Ferocious Roar" end
 end
 
-Beorning.Cleanse = function ()
-    if State.Player.Effects.HasCurable and Utilities.CanUseSkill("Cleanse") then return "Cleanse" end
-end
-
 Beorning.Expose = function ()
     if (State.Player.Skills.Table["Expose (Man)"].LastUsed + 13 < Turbine.Engine.GetGameTime()) and Utilities.CanUseSkill("Expose (Man)") then
         NextSkillName = Beorning.BearForm()

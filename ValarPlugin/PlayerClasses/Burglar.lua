@@ -13,7 +13,7 @@ Burglar.Load = function ()
     PlayerClass.Shortcuts = Burglar.Shortcuts;
     SessionUI.CombatQuickslotWindow = UI.QuickslotWindow(945,829,4);
 
-    LocalPlayer.InStealth = false;
+    Burglar.InStealth = false;
 end
 
 Burglar.TimedUpdate = function ()
@@ -62,17 +62,17 @@ Burglar.Quickslots = {
 };
 
 Burglar.UpdateTraitLine = function ()
-    LocalPlayer.TraitLine = "Blue"
-    LocalPlayer.TraitLine = "Red"
-    LocalPlayer.TraitLine = "Yellow"
+    State.Player.TraitLine = "Blue"
+    State.Player.TraitLine = "Red"
+    State.Player.TraitLine = "Yellow"
 end
 
 Burglar.UpdateStealth = function ()
-    if LocalPlayer.Skills["Sneak"].InUse then
-        LocalPlayer.InStealth = true;
+    if State.Player.Skills.Table["Sneak"].InUse then
+        Burglar.InStealth = true;
         return
     end
-    LocalPlayer.InStealth = false;
+    Burglar.InStealth = false;
 end
 
 Burglar.UpdateQuickslots = function ()
@@ -90,17 +90,17 @@ end
 -- TODO: Heals
 
 Burglar.GetSneak = function ()
-    if not LocalPlayer.InStealth and Utilities.CanUseSkill("Sneak") then return "Sneak" end
+    if not Burglar.InStealth and Utilities.CanUseSkill("Sneak") then return "Sneak" end
 end
 
 Burglar.GetRevealWeakness = function ()
-    if LocalPlayer.Skills["Reveal Weakness"] ~= nil then
-        if not LocalPlayer.Skills["Reveal Weakness"].InUse and Utilities.CanUseSkill("Reveal Weakness") then return "Reveal Weakness" end
+    if State.Player.Skills.Table["Reveal Weakness"] ~= nil then
+        if not State.Player.Skills.Table["Reveal Weakness"].InUse and Utilities.CanUseSkill("Reveal Weakness") then return "Reveal Weakness" end
     end
 end
 
 Burglar.GetAntidote = function ()
-    if LocalPlayer.CanCure and Utilities.CanUseSkill("Burglar's Antidote") then
+    if State.Player.Effects.HasCurable and Utilities.CanUseSkill("Burglar's Antidote") then
         return "Burglar's Antidote";
     end
 end

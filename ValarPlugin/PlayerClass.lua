@@ -4,7 +4,7 @@ PlayerClass = {}
 -- Primary Functions --
 -----------------------
 PlayerClass.Load = function ()
-    if  LocalPlayer.Class == Turbine.Gameplay.Class.Beorning    then  PlayerClasses.Beorning.Load()    end
+    -- if  LocalPlayer.Class == Turbine.Gameplay.Class.Beorning    then  PlayerClasses.Beorning.Load()    end
     if  LocalPlayer.Class == Turbine.Gameplay.Class.Burglar     then  PlayerClasses.Burglar.Load()     end
     if  LocalPlayer.Class == Turbine.Gameplay.Class.Captain     then  PlayerClasses.Captain.Load()     end
     if  LocalPlayer.Class == Turbine.Gameplay.Class.Champion    then  PlayerClasses.Champion.Load()    end
